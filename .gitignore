@@ -1,0 +1,9 @@
+# Logs
+*.log
+
+# VS Code
+.vscode/
+
+# Sensitive files
+config.php
+*.json
