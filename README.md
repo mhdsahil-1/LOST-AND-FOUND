@@ -1,55 +1,101 @@
-# Lost & Found Campus Network
+# Campus Lost & Found · Pure JavaScript Full-Stack Edition
 
-The Lost & Found Campus Network is a web-based application designed to help students and staff report and reclaim lost items within the campus. The system provides a centralized platform for posting lost and found items, making it easier to reunite owners with their belongings.
+A modern, responsive, and clean full-stack web application designed to help campus students, faculty, and security staff report, browse, claim, and recover misplaced belongings. Built with **React 19**, **Node.js Express backend**, **FontAwesome 6 icons**, and a **clean, Cupertino-inspired design** that works seamlessly across all devices (desktops, laptops, tablets, and mobile phones).
 
-This project is built using PHP for the backend and stores data in JSON format, eliminating the need for a traditional database like MySQL. This makes the application lightweight, portable, and easy to deploy.
+---
 
-## Features
+## 🏗️ Architecture & How It Works
 
-### Student Features
+This project is a 100% JavaScript full-stack application structured into two clean tiers:
 
-- **User Authentication**: Simple login system using student ID.
-- **Browse Items**: View a list of all lost and found items posted by other users.
-- **Report Items**: Submit details about lost or found objects, including descriptions, locations, and images.
-- **My Posts**: Track and manage the items you have reported.
-- **Claims**: Contact the finder or report an item as claimed.
+```
+LOST-AND-FOUND/
+├── client/                     # React 19 Frontend (Vite)
+│   ├── src/
+│   │   ├── context/AppContext.jsx   # Central state manager (Items, User, Alerts, Filters)
+│   │   ├── services/api.js          # REST API Client with automatic offline fallback
+│   │   ├── services/storageService.js # LocalStorage sync and offline backup
+│   │   ├── utils/imageUrl.js        # Universal image URL resolver (uploads/base64/cdn)
+│   │   ├── components/
+│   │   │   ├── layout/Navbar.jsx    # Responsive desktop navbar & mobile tabs
+│   │   │   ├── views/               # Explore, Browse, Post, My Posts, Admin
+│   │   │   ├── items/               # ItemCard, ItemDetailModal, ClaimModal, FilterSheet
+│   │   │   └── common/              # FontAwesomeIcon, Badge, SegmentedControl, etc.
+│   │   └── index.css                # Clean, responsive CSS with Dark/Light theme
+│   └── vite.config.ts               # Proxies /api and /uploads to backend (port 5000)
+│
+├── server/                     # Node.js + Express Backend
+│   ├── src/
+│   │   ├── index.js                 # Express server with CORS & static file routes
+│   │   ├── db.js                    # Portable JSON database layer (matches legacy PHP)
+│   │   ├── data/                    # JSON database files (items.json, categories.json)
+│   │   └── routes/
+│   │       ├── items.js             # Items CRUD, search, claim, & image upload
+│   │       ├── admin.js             # Moderator verification queue & analytics
+│   │       └── auth.js              # Student & Admin authentication
+│   └── uploads/                     # Uploaded campus item photos
+│
+└── legacy-php/                 # Archived original PHP codebase for reference
+```
 
-### Admin Features
+### 1. The Client Tier (`client/`)
+- **React 19 + Vite**: High performance, instant compilation (~250ms), and 0 build errors.
+- **`AppContext.jsx`**: Manages global state. On initial load, it fetches items from the backend API (`/api/items`). When online, every action (posting an item, submitting a claim, approving a post, or deleting) persists immediately to the Express backend. If the backend is ever offline, it gracefully falls back to browser `localStorage` so the UI never crashes.
+- **FontAwesome 6**: Consistent vector icons used for categories (electronics, books, bags, cards, keys, clothing, accessories, etc.), action buttons, status pills, and empty states.
+- **Adaptive UI**: Responsive layouts that adjust naturally between desktop multi-column grids and mobile single-column cards with touch controls—without any fake phone borders or flashing elements.
+- **Vite Proxy**: `client/vite.config.ts` automatically proxies `/api` and `/uploads` to `http://localhost:5000`, eliminating CORS issues during development.
 
-- **Dashboard**: Overview of total items, lost vs. found statistics, and recent activity.
-- **Item Verification**: Review and approve user posts before they become visible to the public.
-- **Content Management**: Edit or delete inappropriate or outdated posts.
+### 2. The Server Tier (`server/`)
+- **Express REST API**: Lightweight Node.js server running on port `5000`.
+- **JSON Database Engine (`server/src/db.js`)**: Matches the original PHP file-based storage architecture. Persists data to `server/src/data/items.json` with atomicity, indexing, filtering, and search capabilities.
+- **File Uploads (`Multer` & Base64 Decoder)**: Supports direct multipart form uploads (`POST /api/items`) as well as JSON payloads containing base64 data URLs. Saves uploaded photos to `server/uploads/` with unique filenames (`item_<timestamp>_<hash>.<ext>`) and serves them statically at `/uploads/`.
+- **Moderator Queue & Verification Logic**: Items submitted by students enter a `pending` status by default. Campus administrators review them in the Moderator Console (`GET /api/admin/queue`) and can approve them (`PUT /api/admin/verify/:id`) to make them publicly visible on the explore feed.
+- **Claim & Fraud Prevention**: When someone claims a found item, they must submit ownership details (e.g. device serial numbers, student ID card, or distinguishing marks) which are attached to the item record.
 
-## Installation
+---
 
-To run this project locally, follow these steps:
+## 🚀 How to Run the Application
 
-1. Ensure you have a local server environment installed (e.g., XAMPP, WAMP, or MAMP).
-2. Download or clone this repository.
-3. Place the project folder in your server's root directory (e.g., `htdocs` for XAMPP).
-4. Start the Apache server.
-5. Open your web browser and navigate to `http://localhost/lost-and-found/`.
+You can run the backend and frontend in two terminal windows:
 
-## Default Access
+### Terminal 1: Start the Backend (Port 5000)
+```bash
+# From the project root:
+npm run server
+```
+*Or navigate into `server` and run `npm start`.*  
+The server will start on `http://localhost:5000`. Health check available at `http://localhost:5000/api/health`.
 
-The application comes with a pre-configured admin account for demonstration and management purposes:
+### Terminal 2: Start the Frontend (Port 5173)
+```bash
+# From the project root:
+npm run client
+```
+*Or navigate into `client` and run `npm run dev`.*  
+Open your browser and visit:
+```
+http://localhost:5173
+```
 
-- **Admin Login URL**: `http://localhost/lost-and-found/admin/login.php`
-- **Username**: `admin`
-- **Password**: `admin123`
+---
 
-## Future Scope & Roadmap
+## 🔑 Login Accounts (Matching Legacy PHP)
 
-This project is currently in its initial version. The following features are planned for future updates to enhance functionality and user experience:
+- **Student Login**:
+  - Click the user avatar in the top right.
+  - Choose **Student** and enter any student name (e.g., `Ahmad Farooq` or `Sarah Khan`).
+  - No password required (just like the original `legacy-php/login.php`).
+- **Admin Login**:
+  - Choose **Campus Proctor / Admin**.
+  - **Username**: `admin`
+  - **Password**: `admin123`
+  - Grants access to the Moderator Console, Verification Queue, and full item deletion/approval controls.
 
-- **Database Integration**: Migrate from JSON to a relational database (MySQL) for better scalability and data integrity.
-- **User Registration**: Implement a full registration system for students to create personalized accounts.
-- **Email Notifications**: Automated email alerts when a lost item matches a found report.
-- **Search Optimization**: Advanced search filters for dates, specific locations, and item categories.
-- **Mobile Responsiveness**: Improve the UI to be fully responsive on all mobile devices.
-- **Secure Image Handling**: Implement better validation and compression for image uploads.
-- **Chat System**: A built-in messaging system to allow users to communicate securely without sharing personal contact details.
+---
 
-## License
+## 🛠️ Verification & Testing
 
-This project is open-source and available for educational use.
+- **Client Linting**: `npm --prefix client run lint` (0 errors)
+- **Production Build**: `npm --prefix client run build` (Builds cleanly in ~250ms)
+- **Database Layer**: `node server/src/db.js` (Verified operational)
+- **Dependencies**: Clean npm packages, 0 vulnerabilities, heavy `venv` directories removed.

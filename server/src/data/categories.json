@@ -1,0 +1,58 @@
+[
+  {
+    "id": 1,
+    "name": "Electronics",
+    "icon": "fa-solid fa-laptop",
+    "color": "#007AFF",
+    "description": "Phones, laptops, chargers, headphones"
+  },
+  {
+    "id": 2,
+    "name": "Books & Stationery",
+    "icon": "fa-solid fa-book-open",
+    "color": "#FF9500",
+    "description": "Notebooks, textbooks, pens, binders"
+  },
+  {
+    "id": 3,
+    "name": "Clothing & Accessories",
+    "icon": "fa-solid fa-shirt",
+    "color": "#AF52DE",
+    "description": "Jackets, hoodies, caps, scarves"
+  },
+  {
+    "id": 4,
+    "name": "Bags & Luggage",
+    "icon": "fa-solid fa-bag-shopping",
+    "color": "#5856D6",
+    "description": "Backpacks, totes, pencil cases"
+  },
+  {
+    "id": 5,
+    "name": "Keys & Cards",
+    "icon": "fa-solid fa-key",
+    "color": "#34C759",
+    "description": "ID cards, room keys, car keys, wallets"
+  },
+  {
+    "id": 6,
+    "name": "Sports Equipment",
+    "icon": "fa-solid fa-futbol",
+    "color": "#FF2D55",
+    "description": "Bottles, balls, rackets, gym gear"
+  },
+  {
+    "id": 7,
+    "name": "Jewelry & Watches",
+    "icon": "fa-solid fa-gem",
+    "color": "#FFCC00",
+    "description": "Smartwatches, rings, chains, sunglasses"
+  },
+  {
+    "id": 8,
+    "name": "Others",
+    "icon": "fa-solid fa-box-archive",
+    "color": "#8E8E93",
+    "description": "Umbrellas, water bottles, miscellaneous"
+  }
+]

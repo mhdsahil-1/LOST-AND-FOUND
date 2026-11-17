@@ -1,9 +1,22 @@
 # Logs
 *.log
 
+# Dependencies & Build
+node_modules/
+dist/
+venv/
+__pycache__/
+*.pyc
+.env
+
 # VS Code
 .vscode/
 
-# Sensitive files
+# Sensitive or legacy local data
 config.php
-*.json
+legacy-php/data/*.json
+
+# Keep NPM project manifests
+!package.json
+!package-lock.json
+!*.oxlintrc.json
