@@ -22,9 +22,9 @@ LOST-AND-FOUND/
 │   │   │   ├── items/               # ItemCard, ItemDetailModal, ClaimModal, FilterSheet
 │   │   │   └── common/              # FontAwesomeIcon, Badge, SegmentedControl, etc.
 │   │   └── index.css                # Clean, responsive CSS with Dark/Light theme
-│   └── vite.config.ts               # Proxies /api and /uploads to backend (port 5000)
+│   └── vite.config.ts               # Proxies /api and /uploads to backend (port 5001)
 │
-├── server/                     # Node.js + Express Backend
+├── server/                     # Node.js + Express Backend (Port 5001)
 │   ├── src/
 │   │   ├── index.js                 # Express server with CORS & static file routes
 │   │   ├── db.js                    # Portable JSON database layer (matches legacy PHP)
@@ -43,10 +43,10 @@ LOST-AND-FOUND/
 - **`AppContext.jsx`**: Manages global state. On initial load, it fetches items from the backend API (`/api/items`). When online, every action (posting an item, submitting a claim, approving a post, or deleting) persists immediately to the Express backend. If the backend is ever offline, it gracefully falls back to browser `localStorage` so the UI never crashes.
 - **FontAwesome 6**: Consistent vector icons used for categories (electronics, books, bags, cards, keys, clothing, accessories, etc.), action buttons, status pills, and empty states.
 - **Adaptive UI**: Responsive layouts that adjust naturally between desktop multi-column grids and mobile single-column cards with touch controls—without any fake phone borders or flashing elements.
-- **Vite Proxy**: `client/vite.config.ts` automatically proxies `/api` and `/uploads` to `http://localhost:5000`, eliminating CORS issues during development.
+- **Vite Proxy**: `client/vite.config.ts` automatically proxies `/api` and `/uploads` to `http://localhost:5001`, eliminating CORS issues during development.
 
 ### 2. The Server Tier (`server/`)
-- **Express REST API**: Lightweight Node.js server running on port `5000`.
+- **Express REST API**: Lightweight Node.js server running on port `5001`.
 - **JSON Database Engine (`server/src/db.js`)**: Matches the original PHP file-based storage architecture. Persists data to `server/src/data/items.json` with atomicity, indexing, filtering, and search capabilities.
 - **File Uploads (`Multer` & Base64 Decoder)**: Supports direct multipart form uploads (`POST /api/items`) as well as JSON payloads containing base64 data URLs. Saves uploaded photos to `server/uploads/` with unique filenames (`item_<timestamp>_<hash>.<ext>`) and serves them statically at `/uploads/`.
 - **Moderator Queue & Verification Logic**: Items submitted by students enter a `pending` status by default. Campus administrators review them in the Moderator Console (`GET /api/admin/queue`) and can approve them (`PUT /api/admin/verify/:id`) to make them publicly visible on the explore feed.
@@ -58,13 +58,13 @@ LOST-AND-FOUND/
 
 You can run the backend and frontend in two terminal windows:
 
-### Terminal 1: Start the Backend (Port 5000)
+### Terminal 1: Start the Backend (Port 5001)
 ```bash
 # From the project root:
 npm run server
 ```
 *Or navigate into `server` and run `npm start`.*  
-The server will start on `http://localhost:5000`. Health check available at `http://localhost:5000/api/health`.
+The server will start on `http://localhost:5001`. Health check available at `http://localhost:5001/api/health`.
 
 ### Terminal 2: Start the Frontend (Port 5173)
 ```bash
